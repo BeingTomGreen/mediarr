@@ -1,0 +1,136 @@
+version: '3.9'
+
+services:
+  radarr:
+    container_name: radarr
+    image: lscr.io/linuxserver/radarr:${RADARR_VERSION}
+    restart: unless-stopped
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${APP_DATA_DIR}/radarr:/config
+      - ${DATA_DIR}/${MOVIE_DIR}:/movies
+      # - /path/to/downloadclient-downloads:/downloads #optional
+    ports:
+      - 7878:7878
+    networks:
+      - mediaar
+
+  lidarr:
+    image: lscr.io/linuxserver/lidarr:${LIDARR_VERSION}
+    container_name: lidarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${APP_DATA_DIR}/lidarr:/config
+      - ${DATA_DIR}/${MUSIC_DIR}:/music
+      # - /path/to/downloads:/downloads #optional
+    ports:
+      - 8686:8686
+    restart: unless-stopped
+    networks:
+      - mediaar
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:${SONARR_VERSION}
+    container_name: sonarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${APP_DATA_DIR}/sonarr:/config
+      - ${DATA_DIR}/${TV_DIR}:/tv
+      # - /path/to/downloadclient-downloads:/downloads #optional
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+    networks:
+      - mediaar
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:${BAZARR_VERSION}
+    container_name: bazarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${APP_DATA_DIR}/bazarr:/config
+      - ${DATA_DIR}/${MOVIE_DIR}:/movies
+      - ${DATA_DIR}/${TV_DIR}:/tv
+    ports:
+      - 6767:6767
+    restart: unless-stopped
+    networks:
+      - mediaar
+
+  nextcloud:
+    image: lscr.io/linuxserver/nextcloud:${NEXTCLOUD_VERSION}
+    container_name: nextcloud
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${APP_DATA_DIR}/nextcloud:/config
+      - /path/to/data:/data
+    ports:
+      - 443:443
+    restart: unless-stopped
+    networks:
+      - mediaar
+
+  plex:
+    image: lscr.io/linuxserver/plex:${PLEX_VERSION}
+    container_name: plex
+    # network_mode: host
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - VERSION=docker
+      - TZ=${TZ}
+      - PLEX_CLAIM=${PLEX_CLAIM}
+    volumes:
+      - ${APP_DATA_DIR}/plex:/config
+      - ${DATA_DIR}/${TV_DIR}:/tv
+      - ${DATA_DIR}/${MOVIE_DIR}:/movies
+      - ${DATA_DIR}/${MUSIC_DIR}:/music
+    ports:
+      - 32400:32400
+      - 1900:1900/udp
+      - 3005:3005
+      # - 5353:5353/udp
+      - 8324:8324
+      - 32410:32410/udp
+      - 32412:32412/udp
+      - 32413:32413/udp
+      - 32414:32414/udp
+      - 32469:32469
+    restart: unless-stopped
+    networks:
+      - mediaar
+
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:${SABNZBD_VERSION}
+    container_name: sabnzbd
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${APP_DATA_DIR}/sabnzbd:/config
+      - ${DOWNLOADED_DIR}:/downloads
+      - ${DOWNLOADING_DIR}:/incomplete-downloads
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+    networks:
+      - mediaar
+
+networks:
+  mediaar:
