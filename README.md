@@ -55,3 +55,7 @@ _Image: [linuxserver/bazarr](https://hub.docker.com/r/linuxserver/bazarr)_
 _Image: [linuxserver/bazarr](https://hub.docker.com/r/linuxserver/bazarr)_
 
 [NextCloud](https://nextcloud.com/athome/) puts your data at your fingertips, under your control. Store your documents, calendar, contacts and photos on a server at home, at one of our providers or in a data center you trust.
+
+## License
+
+mediarr is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
