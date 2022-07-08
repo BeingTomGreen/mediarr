@@ -1,5 +1,7 @@
 # mediarr
 
+**VERY MUCH WIP**
+
 arrr me hearties
 
 A simple, very opinionated, Home Media setup built in Docker.
